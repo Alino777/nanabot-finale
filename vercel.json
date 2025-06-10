@@ -1,5 +1,24 @@
 {
-  "rewrites": [
-    { "source": "/(.*)", "destination": "/" }
+  "version": 2,
+  "builds": [
+    {
+      "src": "api/index.py",
+      "use": "@vercel/python"
+    }
   ],
+  "routes": [
+    // REGOLA 1 (per il Backend): Viene letta per prima.
+    // Se la richiesta è per un indirizzo che inizia con /api/...
+    {
+      "src": "/api/(.*)",
+      "dest": "api/index.py" // ...eseguila con il codice Python.
+    },
+    
+    // REGOLA 2 (per il Frontend): Viene letta solo se la Regola 1 non corrisponde.
+    // Per tutto il resto (es. la pagina principale, una pagina non trovata, ecc.)...
+    {
+      "src": "/(.*)",
+      "dest": "/index.html" // ...mostra la nostra pagina index.html.
+    }
+  ]
 }
